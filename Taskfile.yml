@@ -2,17 +2,21 @@ version: '3'
 
 tasks:
   plan:
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - terraform plan
-
+      
   apply:
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - terraform apply
+      - terraform apply -auto-approve
 
   destroy:
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
-      - terraform destroy
+      - terraform destroy -auto-approve
 
   init:
+    dir: '{{.USER_WORKING_DIR}}'
     cmds:
       - terraform init
