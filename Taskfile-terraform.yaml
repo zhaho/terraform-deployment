@@ -1,0 +1,34 @@
+version: '3'
+
+tasks:
+  init:
+    desc: Initialize Terraform Resources
+    dir: '{{.USER_WORKING_DIR}}'
+    preconditions:
+      - which gum
+    cmds:
+      - terraform init
+
+  plan:
+    desc: Plan Terraform Resources
+    preconditions:
+      - which gum
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - terraform plan
+      
+  apply:
+    desc: Apply Terraform Resources
+    preconditions:
+      - which gum
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - terraform apply -auto-approve
+
+  destroy:
+    desc: Destroy all resources in current project
+    preconditions:
+      - which gum
+    dir: '{{.USER_WORKING_DIR}}'
+    cmds:
+      - terraform destroy -auto-approve

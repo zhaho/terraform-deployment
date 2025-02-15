@@ -1,0 +1,70 @@
+version: '3'
+
+vars:
+  OS_CAP: '{{ OS | title }}'
+  ARCH_2: '{{ ARCH | replace "amd64" "x86_64" }}'
+  TARGET: /usr/local/bin
+
+tasks:
+  all:
+    desc: "Update all tools"
+    cmds:
+      - task: gum
+      - task: go
+      - task: yq
+
+  go:
+    desc: Upgrade Go to the latest version
+    vars:
+      LATEST:
+        sh: curl -s "https://go.dev/VERSION?m=text" | head -1
+      VERSION:
+        sh: go version | awk '{print $3}' || echo "not-found"
+    status:
+      - test "{{.VERSION}}" = "{{.LATEST}}"
+    cmds:
+      - curl -Lso /tmp/go_{{.LATEST}}.tar.gz "https://dl.google.com/go/{{.LATEST}}.{{OS}}-{{ARCH}}.tar.gz"
+      - defer: rm /tmp/go_{{.LATEST}}.tar.gz
+      - sudo rm -rf /usr/local/go
+      - sudo tar -C /usr/local -xzf /tmp/go_{{.LATEST}}.tar.gz
+
+  gum:
+    desc: Install/Upgrade 'gum' (github.com/charmbracelet/gum)
+    vars:
+      APP: gum
+      REPO: charmbracelet/gum
+      LATEST:
+        sh: curl -s "https://api.github.com/repos/{{.REPO}}/releases/latest" | jq -r .tag_name
+      VERSION:
+        sh: gum --version | awk '{print $3}' || echo "not-found"
+      SHORT:
+        sh: echo "{{.LATEST}}" | sed -E 's/v//'
+    status:
+      - test "{{.VERSION}}" = "{{.LATEST}}"
+    cmds:
+      - curl -Lso /tmp/gum_{{.LATEST}}.tar.gz "https://github.com/{{.REPO}}/releases/download/{{.LATEST}}/gum_{{.SHORT}}_{{.OS_CAP}}_{{.ARCH_2}}.tar.gz"
+      - defer: rm /tmp/gum_{{.LATEST}}.tar.gz
+      - tar xvf /tmp/gum_{{.LATEST}}.tar.gz gum_{{.SHORT}}_{{.OS_CAP}}_{{.ARCH_2}}/gum -O > ./gum
+      - defer: rm gum
+      - sudo install gum {{.TARGET}}
+
+  yq:
+    desc: Install/Upgrade 'yq' (github.com/mikefarah/yq)
+    vars:
+      APP: yq
+      REPO: mikefarah/yq
+      LATEST:
+        sh: curl -s "https://api.github.com/repos/{{.REPO}}/releases/latest" | jq -r .tag_name
+      VERSION:
+        sh: yq --version | awk '{print $4}' || echo "not-found"
+    preconditions:
+      - which gum
+    status:
+      - which {{.APP}}
+      - test "{{.VERSION}}" = "{{.LATEST}}"
+    cmds:
+      - cmd: gum style --foreground="#ff0" "Updating {{.APP}} from {{.VERSION}} to {{.LATEST}}"
+        silent: true
+      - curl -Lso {{.APP}} "https://github.com/{{.REPO}}/releases/download/{{.LATEST}}/{{.APP}}_{{OS}}_{{ARCH}}"
+      - defer: rm {{.APP}}
+      - sudo install {{.APP}} {{.TARGET}}
