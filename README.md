@@ -1,6 +1,13 @@
 # Terraform Deployment
 Repository for deployment with Terraform
 
+# Prerequisities
+## Required
+* Terraform
+
+## Optional
+* Install Taskfile (https://taskfile.dev/installation/)
+
 # Usage
 ## Setup Environment Variables
 ```bash
