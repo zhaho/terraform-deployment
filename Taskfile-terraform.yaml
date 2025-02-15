@@ -18,12 +18,20 @@ tasks:
       - terraform plan
       
   apply:
-    desc: Apply Terraform Resources
+    silent: true
+    desc: "Apply Terraform Resources"
     preconditions:
       - which gum
     dir: '{{.USER_WORKING_DIR}}'
+    vars:
+      STATIC_IPS:
+        sh: awk -F'"' '/static_ip/ {print $2}' variables.tf | awk -F '/' '{print $1}' | xargs
     cmds:
+      - echo "Provisioning Servers..."
       - terraform apply -auto-approve
+      - echo "Provisioning done! Static IPs are:"
+      - for: { var: STATIC_IPS }
+        cmd: echo {{ .ITEM}}
 
   destroy:
     desc: Destroy all resources in current project
