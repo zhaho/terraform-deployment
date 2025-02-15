@@ -23,7 +23,7 @@ resource "proxmox_virtual_environment_vm" "vm" {
 
   clone {
     node_name = var.target_node
-    vm_id = var.template_id  # Template ID to clone from
+    vm_id = var.template_id
   }
 
   operating_system {
