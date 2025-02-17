@@ -1,0 +1,10 @@
+- name: Setup Lab Servers
+  hosts: all
+  tasks:
+    - name: Run whoami
+      command: whoami
+      register: whoami
+
+    - name: debug
+      debug:
+        var: whoami.stdout

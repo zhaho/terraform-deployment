@@ -1,0 +1,2 @@
+[vms]
+10.4.5.35 ansible_host=10.4.5.35 ansible_user=zhaho ansible_ssh_extra_args="-o StrictHostKeyChecking=no -o ConnectTimeout=30"

@@ -1,0 +1,10 @@
+- name: Setup Management Servers
+  hosts: all
+  tasks:
+    - name: Run hostname
+      command: hostname
+      register: hostname
+
+    - name: debug
+      debug:
+        var: hostname.stdout
