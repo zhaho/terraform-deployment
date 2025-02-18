@@ -5,14 +5,16 @@ resource "null_resource" "remote_provision" {
 
   connection {
     type        = "ssh"
-    user        = "zhaho"
+    user        = var.host_user
     private_key = file("~/.ssh/id_rsa")
     host        = trimsuffix(each.value.static_ip, "/24")
   }
 
   provisioner "remote-exec" {
     inline = [
-      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git management.yml"
+      # Setup ZSH
+      "ansible-galaxy install viasite-ansible.zsh --force",
+      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git -e host_user=${var.host_user} zsh.yml"
     ]
   }
 }
