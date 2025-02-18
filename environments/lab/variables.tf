@@ -39,6 +39,11 @@ variable "vms" {
   ]
 }
 
+variable "host_user" {
+  description = "The SSH user for connecting to the remote host"
+  type        = string
+  default     = "zhaho"  # Change this if needed
+}
 
 variable "pm_api_url" {
   description = "Proxmox API URL"
