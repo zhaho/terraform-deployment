@@ -13,7 +13,7 @@ variable "vms" {
   }))
   default = [
     {
-      name      = "lab-vm-1"
+      name      = "lab01"
       cores     = 2
       memory    = 4096
       disk_size = 20
@@ -21,7 +21,7 @@ variable "vms" {
       gateway   = "10.4.5.1"
     },
     {
-      name      = "lab-vm-2"
+      name      = "lab02"
       cores     = 2
       memory    = 4096
       disk_size = 20
@@ -29,7 +29,7 @@ variable "vms" {
       gateway   = "10.4.5.1"
     },
     {
-      name      = "lab-vm-3"
+      name      = "lab03"
       cores     = 2
       memory    = 4096
       disk_size = 20

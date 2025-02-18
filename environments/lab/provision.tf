@@ -12,7 +12,7 @@ resource "null_resource" "remote_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git management.yml"
+      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git lab.yml"
     ]
   }
 }

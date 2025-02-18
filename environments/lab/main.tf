@@ -1,4 +1,4 @@
-module "lab_vms" {
+module "vms" {
   source = "../../modules/proxmox-vm"
 
   for_each = { for vm in var.vms : vm.name => vm }
@@ -12,5 +12,5 @@ module "lab_vms" {
   vm_static_ip      = each.value.static_ip
   vm_gateway        = each.value.gateway
   vm_datastore      = "local-lvm"
-  template_id       = 9000  # ID of the template VM
+  template_id       = 9200  # ID of the template VM
 }
