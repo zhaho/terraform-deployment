@@ -12,9 +12,8 @@ resource "null_resource" "remote_provision" {
 
   provisioner "remote-exec" {
     inline = [
-      # Setup ZSH
-      "ansible-galaxy install viasite-ansible.zsh --force",
-      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git -e host_user=${var.host_user} zsh.yml"
+      "cloud-init status --wait",  
+      "ansible-pull -U https://github.com/zhaho/ansible-deployment.git -e host_user=${var.host_user} zsh.yml -vvv"
     ]
   }
 }
