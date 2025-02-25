@@ -1,0 +1,35 @@
+version: '3'
+
+tasks:
+  init:
+    desc: Initialize Terraform Resources
+    preconditions:
+      - which gum
+    cmds:
+      - ./terraform.sh init
+
+  plan:
+    desc: Plan Terraform Resources
+    preconditions:
+      - which gum
+    cmds:
+      - ./terraform.sh plan
+      
+  apply:
+    silent: true
+    desc: "Apply Terraform Resources"
+    preconditions:
+      - which gum
+    vars:
+      STATIC_IPS:
+        sh: awk -F'"' '/static_ip/ {print $2}' variables.tf | awk -F '/' '{print $1}' | xargs
+    cmds:
+      - ./terraform.sh apply
+
+
+  destroy:
+    desc: Destroy all resources in current project
+    preconditions:
+      - which gum
+    cmds:
+      - ./terraform.sh destroy
