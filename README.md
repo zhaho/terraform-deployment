@@ -45,6 +45,8 @@ terraform-deployment/
 - ✅ **Interactive CLI**: User-friendly interface for environment and operation selection
 - ✅ **Resource Management**: Configurable CPU, memory, and disk resources
 - ✅ **State Management**: Proper Terraform state handling per environment
+- ✅ **IPAM Integration**: Automatic IP address registration/deregistration with phpIPAM
+- ✅ **Centralized IPAM Config**: All phpIPAM settings defined in one place (`ipam-config.tf`)
 
 ## 📋 Prerequisites
 
@@ -69,9 +71,14 @@ terraform-deployment/
 Add the following to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
+# Proxmox Configuration
 export TF_VAR_pm_api_url="https://your-proxmox-server:8006/api2/json"
 export TF_VAR_pm_api_token_id="terraform@pve!terraform"
 export TF_VAR_pm_api_token_secret="your-api-token-secret"
+
+# IPAM Integration (optional) - settings in ipam-config.tf
+export TF_VAR_ipam_password="your-phpipam-password"
+export TF_VAR_global_enable_ipam=true
 ```
 
 ### Environment Configuration
@@ -99,6 +106,42 @@ variable "vms" {
 ```
 
 ## 🎮 Usage
+
+### **IPAM Integration Usage**
+
+**Option 1: Set environment variables directly:**
+```bash
+export TF_VAR_ipam_password="your-actual-phpipam-password"
+```
+
+**Option 2: Use the provided environment file:**
+```bash
+cp env-example.sh env.sh
+nano env.sh  # Edit with your values
+source env.sh
+```
+
+**Deploy with IPAM integration:**
+```bash
+cd environments/lab-with-ipam
+terraform init
+terraform apply  # VMs created + IPs registered in phpIPAM
+terraform destroy  # VMs destroyed + IPs removed from phpIPAM
+```
+
+**Optional: Disable IPAM globally:**
+```bash
+export TF_VAR_global_enable_ipam=false
+terraform apply  # VMs deployed without IPAM integration
+```
+
+**Debug IPAM integration:**
+```bash
+./check-ip.sh           # Check if a specific IP is in IPAM
+./test-destroy-logic.sh  # Test the IP removal logic manually
+```
+
+**Note:** Replace `your-actual-phpipam-password` with your real phpIPAM admin password.
 
 ### Method 1: Interactive Mode (Recommended)
 
@@ -148,10 +191,21 @@ terraform apply
 - **VMs**: Multiple lab instances (lab01, lab02, lab03)
 - **Network**: 10.4.5.x/24 subnet
 
+### Lab with IPAM Environment
+- **Purpose**: Development and testing with automatic IP management
+- **VMs**: Multiple lab instances with IPAM integration
+- **Network**: 10.4.5.x/24 subnet
+- **Features**: Uses the standard proxmox-vm module with `enable_ipam = true`
+
 ### N8N Environment
 - **Purpose**: Workflow automation platform
 - **VMs**: Single N8N instance
 - **Network**: 10.4.5.150/24
+
+### IPAM Environment
+- **Purpose**: phpIPAM server for IP address management
+- **VMs**: phpIPAM instance
+- **Network**: 10.4.5.66/24
 
 ### Management Environment
 - **Purpose**: Infrastructure management tools
@@ -220,10 +274,16 @@ task update:yq     # Update YQ processor
 3. Test changes in isolated environments
 4. Submit pull requests with detailed descriptions
 
+## 🔗 Additional Documentation
+
+- **[IPAM Integration Guide](IPAM_INTEGRATION.md)**: Detailed guide for phpIPAM integration
+- **[phpIPAM Setup Guide](PHPIPAM_SETUP.md)**: Step-by-step phpIPAM API configuration
+- **[Module Documentation](modules/)**: Technical documentation for Terraform modules
+
 ## 📄 License
 
 This project is licensed under the terms specified in the LICENSE file.
 
 ---
 
-**Note**: This solution is designed for Proxmox Virtual Environment and requires proper API access configuration. Ensure you have appropriate permissions and network access before deployment.
+**Note**: This solution is designed for Proxmox Virtual Environment and requires proper API access configuration. For IPAM integration, ensure phpIPAM is properly configured with API access. Ensure you have appropriate permissions and network access before deployment.
