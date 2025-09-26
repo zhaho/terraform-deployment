@@ -40,3 +40,13 @@ tasks:
     cmds:
       - gum style "task {{.CHOICE}}" --border=rounded --padding="0 1"
       - task -t {{.ROOT_TASKFILE}} "{{.TASK}}"
+
+  scripts:env:
+    desc: Create a new environment using the create-environment script
+    cmds:
+      - ./scripts/create-environment.sh
+
+  scripts:test-ipam:
+    desc: Test IPAM API using the test-ipam-api script
+    cmds:
+      - ./scripts/test-ipam-api.sh
