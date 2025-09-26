@@ -72,12 +72,13 @@ Add the following to your `~/.bashrc` or `~/.zshrc`:
 
 ```bash
 # Proxmox Configuration
-export TF_VAR_pm_api_url="https://your-proxmox-server:8006/api2/json"
-export TF_VAR_pm_api_token_id="terraform@pve!terraform"
-export TF_VAR_pm_api_token_secret="your-api-token-secret"
+export TF_VAR_pm_api_url="https://proxmox.zhaho.duckdns.org/"
+export TF_VAR_pm_api_token_id=root@pam
+export TF_VAR_pm_api_token_secret=password
+
 
 # IPAM Integration (optional) - settings in ipam-config.tf
-export TF_VAR_ipam_password="your-phpipam-password"
+export TF_VAR_ipam_password=ipamPassword
 export TF_VAR_global_enable_ipam=true
 ```
 
