@@ -14,6 +14,7 @@ services:
     volumes:
       - phpipam-logo:/phpipam/css/images/logo
       - phpipam-ca:/usr/local/share/ca-certificates:ro
+      - ./config/config.dist.php:/phpipam/config.dist.php:ro
     depends_on:
       - phpipam-mariadb
 

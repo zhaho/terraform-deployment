@@ -107,6 +107,26 @@ variable "vms" {
 
 ## 🎮 Usage
 
+### **🚀 Quick Start: Create New Environment**
+
+Use the automated environment creator with IPAM integration:
+
+```bash
+# Set your IPAM password
+export TF_VAR_ipam_password="your-actual-phpipam-password"
+
+# Create a new environment (interactive)
+./scripts/create-environment.sh
+```
+
+**Features:**
+- 🔍 **Auto-suggests free IPs** from IPAM
+- 📝 **Interactive prompts** with sensible defaults  
+- 🔗 **Automatic symlink** to centralized IPAM config
+- 📁 **Complete environment** setup (all .tf files)
+- ✅ **Ready to deploy** with `terraform apply`
+- 🛡️ **Validates subnet** and shows network information
+
 ### **IPAM Integration Usage**
 
 **Option 1: Set environment variables directly:**
@@ -135,10 +155,14 @@ export TF_VAR_global_enable_ipam=false
 terraform apply  # VMs deployed without IPAM integration
 ```
 
-**Debug IPAM integration:**
+**Test IPAM connectivity:**
 ```bash
-./check-ip.sh           # Check if a specific IP is in IPAM
-./test-destroy-logic.sh  # Test the IP removal logic manually
+./scripts/test-ipam-api.sh  # Test IPAM API connectivity and functionality
+```
+
+**Fix environments missing variables:**
+```bash
+./scripts/fix-environments.sh  # Add missing Proxmox provider variables to environments
 ```
 
 **Note:** Replace `your-actual-phpipam-password` with your real phpIPAM admin password.
